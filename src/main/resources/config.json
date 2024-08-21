@@ -1,0 +1,64 @@
+{
+  "columns": 3,
+  "rows": 3,
+  "symbols": {
+    "A": {
+      "reward": {
+        "type": "STANDARD",
+        "action": "MULTIPLY",
+        "amount": 1.5
+      },
+      "generationChance": 0.5,
+      "possiblePositions": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": 1
+        },
+        {
+          "x": 2,
+          "y": 2
+        }
+      ]
+    }
+  },
+  "winCombinations": [
+    "SAME_4",
+    "SAME_5",
+    "SAME_6",
+    "SAME_7",
+    "SAME_8",
+    "SAME_9",
+    "SAME_HORIZONTAL",
+    "SAME_VERTICAL",
+    "SAME_DIAGONAL_LR",
+    "SAME_DIAGONAL_RL"
+  ]
+}
