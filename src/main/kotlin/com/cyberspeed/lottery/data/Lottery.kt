@@ -1,30 +1,56 @@
 package com.cyberspeed.lottery.data
 
 data class Lottery(
-    val columns: Int,
-    val rows: Int,
+    val gameArea: GameArea,
     val symbols: Map<Characters, CharConfig>,
-    val winCombinations: Set<CombinationType>,
+    val winCombinations: Map<CombinationType, RewardWrapper>,
 )
 
+data class GameArea (
+    val columns: Int,
+    val rows: Int,
+    val possiblePositions: List<PositionDescription>
+)
+
+data class PositionDescription (
+    val x: Int,
+    val y: Int,
+    val availableSymbols: List<Characters>
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as PositionDescription
+
+        if (x != other.x) return false
+        if (y != other.y) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = x
+        result = 31 * result + y
+        return result
+    }
+}
+
 data class CharConfig(
-    val reward: Reward,
     val generationChance: Float,
-    val possiblePositions: List<CellPosition>,
+)
+
+data class RewardWrapper(
+    val reward: Reward
 )
 
 data class Reward(
-    val type: RewardType,
     val action: RewardAction,
     val amount: Float
 )
 
-data class CellPosition(
-    val x: Int,
-    val y: Int,
-)
-
 enum class CombinationType {
+    SAME_3,
     SAME_4,
     SAME_5,
     SAME_6,
@@ -33,8 +59,7 @@ enum class CombinationType {
     SAME_9,
     SAME_HORIZONTAL,
     SAME_VERTICAL,
-    SAME_DIAGONAL_LR,
-    SAME_DIAGONAL_RL,
+    SAME_DIAGONAL,
 }
 
 enum class Characters {
@@ -54,13 +79,4 @@ enum class Characters {
 enum class RewardAction {
     MULTIPLY,
     SUM,
-    SUBTRACT,
-    DIVIDE,
-    LOG,
-    POW,
-}
-
-enum class RewardType {
-    STANDARD,
-    BONUS
 }
