@@ -239,7 +239,7 @@
     "SAME_DIAGONAL": {
       "reward": {
         "action": "MULTIPLY",
-        "amount": 2
+        "amount": 5
       }
     }
   }

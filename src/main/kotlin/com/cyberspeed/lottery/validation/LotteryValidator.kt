@@ -12,7 +12,7 @@ fun validate(lottery: Lottery) {
     
     lottery.symbols.forEach { kv ->
         //validate generation chance
-        if (kv.value.generationChance < 0 && kv.value.generationChance > 1)
+        if (kv.value.generationChance < 0 || kv.value.generationChance > 1)
             throw LotteryValidationException("Generation change for symbol ${kv.key} should be between 0 and 1")
     }
 

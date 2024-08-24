@@ -1,0 +1,246 @@
+{
+  "gameArea": {
+    "columns": 3,
+    "rows": 3,
+    "possiblePositions": [
+      {
+        "x": 0,
+        "y": 0,
+        "availableSymbols": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "X10",
+          "X5",
+          "P1000",
+          "P500"
+        ]
+      },
+      {
+        "x": 0,
+        "y": 1,
+        "availableSymbols": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "X10",
+          "X5",
+          "P1000",
+          "P500"
+        ]
+      },
+      {
+        "x": 0,
+        "y": 2,
+        "availableSymbols": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "X10",
+          "X5",
+          "P1000",
+          "P500"
+        ]
+      },
+      {
+        "x": 1,
+        "y": 0,
+        "availableSymbols": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "X10",
+          "X5",
+          "P1000",
+          "P500"
+        ]
+      },
+      {
+        "x": 1,
+        "y": 1,
+        "availableSymbols": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "X10",
+          "X5",
+          "P1000",
+          "P500"
+        ]
+      },
+      {
+        "x": 1,
+        "y": 2,
+        "availableSymbols": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "X10",
+          "X5",
+          "P1000",
+          "P500"
+        ]
+      },
+      {
+        "x": 2,
+        "y": 0,
+        "availableSymbols": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "X10",
+          "X5",
+          "P1000",
+          "P500"
+        ]
+      },
+      {
+        "x": 2,
+        "y": 1,
+        "availableSymbols": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "X10",
+          "X5",
+          "P1000",
+          "P500"
+        ]
+      },
+      {
+        "x": 2,
+        "y": 2,
+        "availableSymbols": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "X10",
+          "X5",
+          "P1000",
+          "P500"
+        ]
+      }
+    ]
+  },
+  "symbols": {
+    "A": {
+      "generationChance": 0.5
+    },
+    "B": {
+      "generationChance": 0.4
+    },
+    "C": {
+      "generationChance": 0.3
+    },
+    "D": {
+      "generationChance": 0.2
+    },
+    "E": {
+      "generationChance": 0.15
+    },
+    "F": {
+      "generationChance": 0.1
+    },
+    "X10": {
+      "generationChance": 0.1
+    },
+    "X5": {
+      "generationChance": 0.2
+    },
+    "P1000": {
+      "generationChance": 0.2
+    },
+    "P500": {
+      "generationChance": 0.3
+    }
+  },
+  "winCombinations": {
+    "SAME_3": {
+      "reward": {
+        "action": "MULTIPLY",
+        "amount": 1
+      }
+    },
+    "SAME_4": {
+      "reward": {
+        "action": "MULTIPLY",
+        "amount": 2
+      }
+    },
+    "SAME_5": {
+      "reward": {
+        "action": "MULTIPLY",
+        "amount": 3
+      }
+    },
+    "SAME_6": {
+      "reward": {
+        "action": "MULTIPLY",
+        "amount": 5
+      }
+    },
+    "SAME_7": {
+      "reward": {
+        "action": "MULTIPLY",
+        "amount": 7
+      }
+    },
+    "SAME_8": {
+      "reward": {
+        "action": "MULTIPLY",
+        "amount": 10
+      }
+    },
+    "SAME_9": {
+      "reward": {
+        "action": "MULTIPLY",
+        "amount": 50
+      }
+    },
+    "SAME_HORIZONTAL": {
+      "reward": {
+        "action": "MULTIPLY",
+        "amount": 2
+      }
+    },
+    "SAME_VERTICAL": {
+      "reward": {
+        "action": "MULTIPLY",
+        "amount": 2
+      }
+    },
+    "SAME_DIAGONAL": {
+      "reward": {
+        "action": "MULTIPLY",
+        "amount": 5
+      }
+    }
+  }
+}

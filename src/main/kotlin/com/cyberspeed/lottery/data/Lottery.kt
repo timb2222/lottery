@@ -73,7 +73,39 @@ enum class Characters {
     X5,
     P1000,
     P500,
-    NONE,
+    NONE,;
+
+    fun isBasicCharacters(): Boolean {
+        return when(this){
+            A -> true
+            B -> true
+            C -> true
+            D -> true
+            E -> true
+            F -> true
+            X10 -> false
+            X5 -> false
+            P1000 -> false
+            P500 -> false
+            NONE -> false
+        }
+    }
+
+    fun isBonusCharacters(): Boolean {
+        return when(this){
+            A -> false
+            B -> false
+            C -> false
+            D -> false
+            E -> false
+            F -> false
+            X10 -> true
+            X5 -> true
+            P1000 -> true
+            P500 -> true
+            NONE -> false
+        }
+    }
 }
 
 enum class RewardAction {

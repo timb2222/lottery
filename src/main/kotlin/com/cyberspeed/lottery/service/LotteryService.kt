@@ -32,79 +32,156 @@ class LotteryService(
 
     fun play(lotteryField: List<List<Characters>>, bet: Int): Int {
         var totalWin = bet
-        config.winCombinations.forEach {
-            when (it.key) {
-                SAME_3 -> if(ifSame(lotteryField, 4)) totalWin = calculate(SAME_3, bet)
-                SAME_4 -> if(ifSame(lotteryField, 4)) totalWin = calculate(SAME_4, bet)
-                SAME_5 -> if(ifSame(lotteryField, 5)) totalWin = calculate(SAME_5, bet)
-                SAME_6 -> if(ifSame(lotteryField, 6)) totalWin = calculate(SAME_6, bet)
-                SAME_7 -> if(ifSame(lotteryField, 7)) totalWin = calculate(SAME_7, bet)
-                SAME_8 -> if(ifSame(lotteryField, 8)) totalWin = calculate(SAME_8, bet)
-                SAME_9 -> if(ifSame(lotteryField, 9)) totalWin = calculate(SAME_9, bet)
-                SAME_HORIZONTAL -> if(ifSameHorizontal(lotteryField)) totalWin = calculate(SAME_HORIZONTAL, bet)
-                SAME_VERTICAL -> if(ifSameVertical(lotteryField)) totalWin = calculate(SAME_VERTICAL, bet)
-                SAME_DIAGONAL -> if(ifSameDiagonal(lotteryField)) totalWin = calculate(SAME_DIAGONAL, bet)
-            }
+
+        // Определяем максимальную выигрышную комбинацию из категории SAME_X
+        var maxSameXCombination: CombinationType? = null
+
+        if (ifSame(lotteryField, 3)) maxSameXCombination = SAME_3
+        if (ifSame(lotteryField, 4)) maxSameXCombination = SAME_4
+        if (ifSame(lotteryField, 5)) maxSameXCombination = SAME_5
+        if (ifSame(lotteryField, 6)) maxSameXCombination = SAME_6
+        if (ifSame(lotteryField, 7)) maxSameXCombination = SAME_7
+        if (ifSame(lotteryField, 8)) maxSameXCombination = SAME_8
+        if (ifSame(lotteryField, 9)) maxSameXCombination = SAME_9
+
+        // Применяем наибольшую выигрышную комбинацию из категории SAME_X
+        if (maxSameXCombination != null) {
+            totalWin = calculate(maxSameXCombination, bet)
         }
-        
-        //if won
-        if (totalWin > bet) {
-            config.symbols.keys.forEach{
-                when (it){
-                    Characters.X10 -> totalWin = doMath(MULTIPLY, 10f, totalWin)
-                    Characters.X5 -> totalWin = doMath(MULTIPLY, 5f, totalWin)
-                    Characters.P1000 -> totalWin = doMath(SUM, 1000f, totalWin)
-                    Characters.P500 -> totalWin = doMath(SUM, 500f, totalWin)
-                    Characters.A -> {/*NOTHING*/}
-                    Characters.B -> {/*NOTHING*/}
-                    Characters.C -> {/*NOTHING*/}
-                    Characters.D -> {/*NOTHING*/}
-                    Characters.E -> {/*NOTHING*/}
-                    Characters.F -> {/*NOTHING*/}
-                    Characters.NONE -> {/*NOTHING*/}
+
+        // Применяем горизонтальные, вертикальные и диагональные комбинации
+        if (ifSameHorizontal(lotteryField)) totalWin = calculate(SAME_HORIZONTAL, totalWin)
+        if (ifSameVertical(lotteryField)) totalWin = calculate(SAME_VERTICAL, totalWin)
+        if (ifSameDiagonal(lotteryField)) totalWin = calculate(SAME_DIAGONAL, totalWin)
+
+        // Отдельные переменные для промежуточных результатов с бонусами
+        var totalWithMultipliers = 1
+        var totalWithAdditions = 0
+
+        if (totalWin == bet && maxSameXCombination == null) {
+            println("No winning combinations")
+            return 0
+        }
+
+        lotteryField.flatten().forEach {
+            when (it) {
+                Characters.X5 -> {
+                    println("Applying $it")
+                    totalWithMultipliers = Math.max(totalWithMultipliers, 5)
                 }
+
+                Characters.X10 -> {
+                    println("Applying $it")
+                    totalWithMultipliers = Math.max(totalWithMultipliers, 10)
+                }
+
+                Characters.P1000 -> {
+                    println("Applying $it")
+                    totalWithAdditions += 1000
+                }
+
+                Characters.P500 -> {
+                    println("Applying $it")
+                    totalWithAdditions += 500
+                }
+
+                Characters.A -> {}
+                Characters.B -> {}
+                Characters.C -> {}
+                Characters.D -> {}
+                Characters.E -> {}
+                Characters.F -> {}
+                Characters.NONE -> {}
             }
         }
         
+
+        // Суммируем все примененные бонусы
+        totalWin = totalWin * totalWithMultipliers + totalWithAdditions
         return totalWin
     }
 
     private fun calculate(combination: CombinationType, bet: Int): Int {
+        println("Applying $combination")
         val reward = config.winCombinations[combination]
             ?: throw LotteryException("Win combination $combination not exist in config")
         return doMath(reward.reward.action, reward.reward.amount, bet)
     }
-    
-    private fun doMath(action: RewardAction, amount: Float, bet: Int): Int{
-        return when (action){
+
+    private fun doMath(action: RewardAction, amount: Float, bet: Int): Int {
+        return when (action) {
             MULTIPLY -> (bet * amount).roundToInt()
-            RewardAction.SUM -> (bet + amount).roundToInt()
+            SUM -> (bet + amount).roundToInt()
         }
     }
 
     private fun ifSame(lotteryField: List<List<Characters>>, times: Int): Boolean {
         var result = false
         val symbols = lotteryField.flatten().groupingBy { it }.eachCount()
-        symbols.forEach { if(it.value == times) result = true }
+        symbols.forEach { if (it.value == times && it.key.isBasicCharacters()) result = true }
         return result
     }
 
     private fun ifSameHorizontal(lotteryField: List<List<Characters>>): Boolean {
-        var result = false
-        TODO()
-        return result
+        repeat(config.gameArea.rows) { x ->
+            val symbol = lotteryField[x][0]
+            if (symbol.isBonusCharacters()) return@repeat
+            var allSame = true
+            repeat(config.gameArea.columns) { y ->
+                if (lotteryField[x][y] != symbol) {
+                    allSame = false
+                    return@repeat
+                }
+            }
+            if (allSame) return true
+        }
+        return false
     }
 
     private fun ifSameVertical(lotteryField: List<List<Characters>>): Boolean {
-        var result = false
-        TODO()
-        return result
+        repeat(config.gameArea.columns) { y ->
+            val symbol = lotteryField[0][y]
+            if (symbol.isBonusCharacters()) return@repeat
+            var allSame = true
+            repeat(config.gameArea.rows) { x ->
+                if (lotteryField[x][y] != symbol) {
+                    allSame = false
+                    return@repeat
+                }
+            }
+            if (allSame) return true
+        }
+        return false
     }
 
     private fun ifSameDiagonal(lotteryField: List<List<Characters>>): Boolean {
-        var result = false
-        TODO()
-        return result
+        if (lotteryField.isEmpty() || lotteryField[0].isEmpty()) return false
+
+        val n = lotteryField.size
+        val m = lotteryField[0].size
+
+        // Проверка главной диагонали
+        val mainDiagonalChar = lotteryField[0][0]
+        var isMainDiagonalSame = true
+        repeat(minOf(n, m)) { i ->
+            if (lotteryField[i][i] != mainDiagonalChar || mainDiagonalChar.isBonusCharacters()) {
+                isMainDiagonalSame = false
+                return@repeat
+            }
+        }
+
+        // Проверка побочной диагонали
+        val secondaryDiagonalChar = lotteryField[0][m - 1]
+        var isSecondaryDiagonalSame = true
+        repeat(minOf(n, m)) { i ->
+            if (lotteryField[i][m - i - 1] != secondaryDiagonalChar || secondaryDiagonalChar.isBonusCharacters()) {
+                isSecondaryDiagonalSame = false
+                return@repeat
+            }
+        }
+
+        // Возвращаем true, если одна из диагоналей состоит из одинаковых символов
+        return isMainDiagonalSame || isSecondaryDiagonalSame
     }
 
     private fun generateCell(charChance: List<Pair<Characters, Float>>): Characters {
@@ -119,4 +196,4 @@ class LotteryService(
     }
 }
 
-class LotteryException(message: String): Exception(message)
+class LotteryException(message: String) : Exception(message)
