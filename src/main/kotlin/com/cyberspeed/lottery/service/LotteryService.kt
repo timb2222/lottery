@@ -33,7 +33,6 @@ class LotteryService(
     fun play(lotteryField: List<List<Characters>>, bet: Int): Int {
         var totalWin = bet
 
-        // Определяем максимальную выигрышную комбинацию из категории SAME_X
         var maxSameXCombination: CombinationType? = null
 
         if (ifSame(lotteryField, 3)) maxSameXCombination = SAME_3
@@ -44,17 +43,14 @@ class LotteryService(
         if (ifSame(lotteryField, 8)) maxSameXCombination = SAME_8
         if (ifSame(lotteryField, 9)) maxSameXCombination = SAME_9
 
-        // Применяем наибольшую выигрышную комбинацию из категории SAME_X
         if (maxSameXCombination != null) {
             totalWin = calculate(maxSameXCombination, bet)
         }
 
-        // Применяем горизонтальные, вертикальные и диагональные комбинации
         if (ifSameHorizontal(lotteryField)) totalWin = calculate(SAME_HORIZONTAL, totalWin)
         if (ifSameVertical(lotteryField)) totalWin = calculate(SAME_VERTICAL, totalWin)
         if (ifSameDiagonal(lotteryField)) totalWin = calculate(SAME_DIAGONAL, totalWin)
 
-        // Отдельные переменные для промежуточных результатов с бонусами
         var totalWithMultipliers = 1
         var totalWithAdditions = 0
 
@@ -95,10 +91,8 @@ class LotteryService(
             }
         }
         
-
-        // Суммируем все примененные бонусы
         totalWin = totalWin * totalWithMultipliers + totalWithAdditions
-        return totalWin
+        return totalWin 
     }
 
     private fun calculate(combination: CombinationType, bet: Int): Int {
@@ -160,7 +154,6 @@ class LotteryService(
         val n = lotteryField.size
         val m = lotteryField[0].size
 
-        // Проверка главной диагонали
         val mainDiagonalChar = lotteryField[0][0]
         var isMainDiagonalSame = true
         repeat(minOf(n, m)) { i ->
@@ -170,7 +163,6 @@ class LotteryService(
             }
         }
 
-        // Проверка побочной диагонали
         val secondaryDiagonalChar = lotteryField[0][m - 1]
         var isSecondaryDiagonalSame = true
         repeat(minOf(n, m)) { i ->
@@ -180,7 +172,6 @@ class LotteryService(
             }
         }
 
-        // Возвращаем true, если одна из диагоналей состоит из одинаковых символов
         return isMainDiagonalSame || isSecondaryDiagonalSame
     }
 

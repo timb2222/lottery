@@ -10,7 +10,6 @@ class LotteryServiceTest {
 
     @BeforeEach
     fun setUp() {
-        // Инициализация символов с их шансами генерации
         val symbols = mapOf(
             Characters.A to CharConfig(generationChance = 0.5f),
             Characters.B to CharConfig(generationChance = 0.4f),
@@ -24,7 +23,6 @@ class LotteryServiceTest {
             Characters.P500 to CharConfig(generationChance = 0.3f)
         )
 
-        // Инициализация выигрышных комбинаций с их наградами
         val winCombinations = mapOf(
             CombinationType.SAME_3 to RewardWrapper(Reward(RewardAction.MULTIPLY, 1f)),
             CombinationType.SAME_4 to RewardWrapper(Reward(RewardAction.MULTIPLY, 2f)),
@@ -38,7 +36,6 @@ class LotteryServiceTest {
             CombinationType.SAME_DIAGONAL to RewardWrapper(Reward(RewardAction.MULTIPLY, 5f))
         )
 
-        // Инициализация игровой области с возможными позициями символов
         val possiblePositions = listOf(
             PositionDescription(0, 0, listOf(Characters.A, Characters.B, Characters.C, Characters.D, Characters.E, Characters.F, Characters.X10, Characters.X5, Characters.P1000, Characters.P500)),
             PositionDescription(0, 1, listOf(Characters.A, Characters.B, Characters.C, Characters.D, Characters.E, Characters.F, Characters.X10, Characters.X5, Characters.P1000, Characters.P500)),
@@ -57,14 +54,12 @@ class LotteryServiceTest {
             possiblePositions = possiblePositions
         )
 
-        // Инициализация лотереи
         val lottery = Lottery(
             gameArea = gameArea,
             symbols = symbols,
             winCombinations = winCombinations
         )
 
-        // Инициализация сервиса лотереи
         lotteryService = LotteryService(lottery)
     }
     @Test
